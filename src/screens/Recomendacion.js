@@ -1,5 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Picker } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
 
 const URI = 'http://192.168.100.27:8000';
 
@@ -8,19 +10,63 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#101010'
     },
     text: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        margin: 10
+        fontSize: 40,
+        fontWeight: '700',
+        margin: 30,
+        color: '#C59227',
+        textAlign: 'center'
+    },
+    text2: {
+        fontSize: 15,
+        fontWeight: '400',
+        margin: 0,
+        color: '#C59227',
+        textAlign: 'center'
+    },
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        width: 300,
+        borderColor: '#C59227',
+        color: '#C59227',
+    },
+    input2: {
+        height: 80,
+        margin: 12,
+        borderWidth: 1,
+        width: 300,
+        borderColor: '#C59227',
+        color: '#C59227',
+    },
+    picker: {
+        height: 50,
+        margin: 12,
+        borderWidth: 1,
+        width: 300,
+        borderColor: '#C59227',
+        color: '#C59227',
+        borderStyle: "solid",
     }
 })
 
 function Recomendacion() {
     const [values, setValues] = useState({
-        name: '',
-        users: '',
+        name: null,
+        users: null,
+        porcentaje: '',
+        peliculas: null,
     })
+
+    function handleChangeName(value) {
+        setValues(values => ({
+            ...values,
+            name: value,
+        }))
+    }
 
     async function getUsers() {
         try {
@@ -37,20 +83,69 @@ function Recomendacion() {
         }
     }
 
+    function handleChangePorcentaje(value) {
+        setValues(values => ({
+            ...values,
+            porcentaje: value,
+        }))
+    }
+
+    async function submit() {
+        try {
+            let response = await
+                fetch(URI + '/api/consulta', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(values)
+                });
+            console.log(await response);
+            let json = await response.json();
+            console.log(json);
+            Alert.alert(json.message);
+            setValues(values => ({
+                ...values,
+                peliculas: JSON.parse(json.peliculas),
+            }))
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     useEffect(() => {
         getUsers()
     }, []);
+
     return (
         <View style={styles.body}>
-            <Text style={styles.text}>Esta es la pantalla de recomendacion alv</Text>
+            <Text style={styles.text}>Recomendaciones</Text>
+            <Text style={styles.text2}>Selecciona tu usuario:</Text>
             <Picker
-                selectedValue={selectedValue}
-                style={{ height: 50, width: 150 }}
-                onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                selectedValue={values.name}
+                style={styles.picker}
+                onValueChange={(itemValue, itemIndex) => handleChangeName(itemValue)}
             >
-                <Picker.Item label="Java" value="java" />
-                <Picker.Item label="JavaScript" value="js" />
+                {values.users && values.users.length && values.users.map((usuario, index) => (
+                    <Picker.Item label={usuario.name} value={usuario.name} key={index} />
+                ))}
             </Picker>
+            <TextInput
+                style={styles.input}
+                title="hola"
+                onChangeText={text => handleChangePorcentaje(text)}
+                value={values.porcentaje}
+                placeholder="Introduce el porcentaje de matching deseado"
+                placeholderTextColor="#C59227"
+                keyboardType="numeric"
+            />
+            <Button
+                onPress={submit}
+                title="Consultar"
+                color="#7a1f24"
+                accessibilityLabel="Registrate en Cineponys"
+            />
         </View>
     )
 }
