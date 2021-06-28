@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-
+import Carousel from "pinar";
 
 const URI = 'http://192.168.100.27:8000';
 
@@ -23,6 +23,13 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '400',
         margin: 0,
+        color: '#C59227',
+        textAlign: 'center'
+    },
+    text3: {
+        fontSize: 15,
+        fontWeight: '400',
+        margin: 20,
         color: '#C59227',
         textAlign: 'center'
     },
@@ -53,12 +60,39 @@ const styles = StyleSheet.create({
     }
 })
 
+const styles2 = {
+    slide1: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#a3c9a8"
+    },
+    slide2: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#84b59f"
+    },
+    slide3: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#69a297"
+    },
+    text: {
+        color: "#1f2d3d",
+        opacity: 0.7,
+        fontSize: 28,
+        fontWeight: "bold"
+    }
+};
+
 function Recomendacion() {
     const [values, setValues] = useState({
         name: null,
         users: null,
         porcentaje: '',
-        peliculas: null,
+        peliculas: [],
     })
 
     function handleChangeName(value) {
@@ -118,6 +152,17 @@ function Recomendacion() {
         getUsers()
     }, []);
 
+    function random() {
+        var estilo = {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: '#' + Math.floor(Math.random() * 16777215).toString(16)
+        }
+        console.log(estilo);
+        return estilo
+    }
+
     return (
         <View style={styles.body}>
             <Text style={styles.text}>Recomendaciones</Text>
@@ -146,6 +191,20 @@ function Recomendacion() {
                 color="#7a1f24"
                 accessibilityLabel="Registrate en Cineponys"
             />
+            {values.peliculas && values.peliculas.length > 0 ?
+                <Carousel style={{ margin: 10 }}>
+                    {values.peliculas.map((peli, index) => (
+                        <View style={random()} key={index}>
+                            <Text style={styles2.text}>{peli.pelicula}</Text>
+                            <Text style={styles2.text}>%Genero= {parseInt(peli.porcentaje_genero).toFixed(2)}</Text>
+                            <Text style={styles2.text}>%Valores={parseInt(peli.porcentaje_valores).toFixed(2)}</Text>
+                        </View>
+                    ))}
+                </Carousel>
+                :
+                <Text style={styles.text3}> No hay resultados, lo siento :(</Text>
+            }
+
         </View>
     )
 }
