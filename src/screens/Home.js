@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         margin: 0,
         fontFamily: 'Verdana',
-        color: '#96a573'
+        color: '#C59227'
     }
 })
 
