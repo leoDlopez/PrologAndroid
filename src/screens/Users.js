@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Alert, TouchableOpacity, Image } from 'react-native';
 
 const URI = 'http://192.168.100.27:8000';
 
@@ -8,12 +8,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#101010'
+        backgroundColor: '#101010',
+        paddingBottom: 25
     },
     text: {
         fontSize: 45,
         fontWeight: '700',
-        margin: 30,
+        margin: 15,
+        color: '#C59227'
+    },
+    text2: {
+        fontSize: 25,
+        fontWeight: '500',
+        margin: 0,
         color: '#C59227'
     },
     input: {
@@ -32,6 +39,42 @@ const styles = StyleSheet.create({
         borderColor: '#C59227',
         color: '#C59227',
     },
+    button: {
+        backgroundColor: 'transparent',
+        borderRadius: 20,
+        padding: 10,
+        marginTop: 20,
+        marginBottom: 20,
+        shadowColor: '#303838',
+        shadowOffset: { width: 0, height: 5 },
+        shadowRadius: 10,
+        shadowOpacity: 0.35,
+        height: 80,
+        width: 150,
+        borderColor: "#7A1F24",
+        borderWidth: 1,
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    buttonPressed: {
+        backgroundColor: '#7A1F24',
+        borderRadius: 20,
+        padding: 10,
+        marginTop: 20,
+        marginBottom: 20,
+        shadowColor: '#303838',
+        shadowOffset: { width: 0, height: 5 },
+        shadowRadius: 10,
+        shadowOpacity: 0.35,
+        height: 80,
+        width: 150,
+        borderColor: "#7A1F24",
+        borderWidth: 1,
+        marginLeft: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })
 
 function Users() {
@@ -39,6 +82,10 @@ function Users() {
         name: '',
         cadenaGeneros: '',
         cadenaValores: '',
+        cinepony: false,
+        cinepolis: false,
+        cinemex: false,
+        cinedot: false,
     })
 
     function handleChangeName(value) {
@@ -59,6 +106,34 @@ function Users() {
         setValues(values => ({
             ...values,
             cadenaValores: value,
+        }))
+    }
+
+    function handleCinepony() {
+        setValues(values => ({
+            ...values,
+            cinepony: !values.cinepony,
+        }))
+    }
+
+    function handleCinepolis() {
+        setValues(values => ({
+            ...values,
+            cinepolis: !values.cinepolis,
+        }))
+    }
+
+    function handleCinemex() {
+        setValues(values => ({
+            ...values,
+            cinemex: !values.cinemex,
+        }))
+    }
+
+    function handleCinedot() {
+        setValues(values => ({
+            ...values,
+            cinedot: !values.cinedot,
         }))
     }
 
@@ -111,6 +186,21 @@ function Users() {
                 multiline={true}
 
             />
+            <Text style={styles.text2}>Elige tus cines favoritos!</Text>
+            <View style={{ flex: 1, flexDirection: 'row', flexWrap: "wrap", justifyContent: "center" }}>
+                <TouchableOpacity style={!values.cinepony ? styles.button : styles.buttonPressed} onPress={handleCinepony}>
+                    <Image source={require("../assets/cponys2.png")} style={{ width: 100.2, height: 70, marginLeft: 0, marginTop: 0 }} />
+                </TouchableOpacity>
+                <TouchableOpacity style={!values.cinepolis ? styles.button : styles.buttonPressed} onPress={handleCinepolis}>
+                    <Image source={require("../assets/cinepolis.png")} style={{ width: 70, height: 70, marginLeft: 0, marginTop: 0 }} />
+                </TouchableOpacity>
+                <TouchableOpacity style={!values.cinemex ? styles.button : styles.buttonPressed} onPress={handleCinemex}>
+                    <Image source={require("../assets/cinemex.png")} style={{ width: 140, height: 40, marginLeft: 0, marginTop: 0 }} />
+                </TouchableOpacity>
+                <TouchableOpacity style={!values.cinedot ? styles.button : styles.buttonPressed} onPress={handleCinedot}>
+                    <Image source={require("../assets/cinedot.jpg")} style={{ width: 70, height: 70, marginLeft: 0, marginTop: 0, borderRadius: 50 }} />
+                </TouchableOpacity>
+            </View>
             <Button
                 onPress={submit}
                 title="Registrar"
