@@ -198,6 +198,7 @@ function Recomendacion() {
                             <Text style={styles2.text}>{peli.pelicula}</Text>
                             <Text style={styles2.text}>%Genero= {parseInt(peli.porcentaje_genero).toFixed(2)}</Text>
                             <Text style={styles2.text}>%Valores={parseInt(peli.porcentaje_valores).toFixed(2)}</Text>
+                            <Text style={styles2.text}>%Cine={parseInt(peli.porcentaje_cine).toFixed(2)}</Text>
                         </View>
                     ))}
                 </Carousel>
